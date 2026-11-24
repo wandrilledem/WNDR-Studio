@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WDNR Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+/* IDEA the intro is a giant browser window: the thing being sold
+   MOTIF a solid black block, the text cursor: in the logo, the address bar, the active link, the page curtain
+   COLOUR pure white and pure black, one grey for secondary text, one for lines
+   TYPE Archivo wide (125%) heavy for headlines, sentence case; Archivo regular for text
+   OFFER no prices: a free quote or a free call, sent on WhatsApp or by email
+   MOTION one moment: the address types itself, then the headline rises; plus the page curtain */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#000000);--ink:light-dark(#000000,#ffffff);--muted:light-dark(#5f5f5f,#a6a6a6);--line:light-dark(#e4e4e4,#262626);--soft:light-dark(#f3f3f3,#141414)}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Archivo,system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+.band{padding-block:clamp(48px,7vw,104px)}
+h1,h2,.ct{font-stretch:118%;font-weight:800;letter-spacing:-.025em;line-height:1.04;text-wrap:balance}
+h1{font-size:clamp(38px,6vw,72px);margin:0 0 28px}
+h2{font-size:clamp(28px,3.4vw,40px);margin:0 0 28px}
+h3{font-size:19px;margin:0 0 4px}
+p{margin:0;max-width:52ch}
+.muted{color:var(--muted)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+h1:focus{outline:none}
+
+.page{display:none}
+.page.on{display:block}
+
+/* the block cursor */
+.blk{display:inline-block;width:.5em;height:.74em;background:currentColor;vertical-align:baseline;margin-left:.07em}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--bg)}
+.top .wrap{max-width:none;display:flex;align-items:center;gap:clamp(12px,3vw,40px);padding-block:16px;padding-inline:clamp(16px,3vw,40px)}
+.logo{display:inline-flex;align-items:baseline;gap:8px;text-decoration:none;margin-right:auto}
+.logo b{font-stretch:125%;font-weight:900;font-size:25px;letter-spacing:-.03em;line-height:1}
+.logo small{font-size:15px;color:var(--muted)}
+nav{display:flex;gap:clamp(4px,1.6vw,24px)}
+nav a{text-decoration:none;font-weight:600;font-size:16px;color:var(--muted);min-height:44px;display:inline-flex;align-items:center;padding:0 6px}
+nav a:hover{color:var(--ink)}
+nav a[aria-current=page]{color:var(--ink)}
+nav a[aria-current=page]::before{content:"";width:8px;height:8px;background:currentColor;margin-right:8px}
+.top .btn{min-height:44px;padding:0 20px;font-size:15px}
+
+/* buttons */
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:12px;font:700 16px Archivo,sans-serif;text-decoration:none;border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn:hover{opacity:.85}
+.btn.lg{min-height:62px;padding:0 32px;font-size:18px}
+
+/* intro: the browser window */
+.screen{margin:0 clamp(10px,1.6vw,24px);background:var(--ink);color:var(--bg);border-radius:clamp(18px,2.2vw,32px);min-height:calc(100svh - 92px);display:flex;flex-direction:column;overflow:hidden}
+.sbar{display:flex;align-items:center;gap:8px;padding:clamp(14px,1.6vw,20px) clamp(16px,2.4vw,32px)}
+.sbar>i{flex:none;width:12px;height:12px;border-radius:50%;border:1.5px solid currentColor;opacity:.5}
+.addr{margin-left:clamp(8px,2vw,24px);flex:0 1 420px;display:flex;align-items:center;height:38px;padding:0 16px;border-radius:999px;background:color-mix(in srgb,var(--bg) 13%,transparent);font-size:15px;white-space:nowrap;overflow:hidden}
+.addr .blk{height:1.05em;width:.5em;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sbody{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:clamp(48px,7vw,96px);padding:clamp(48px,8vw,120px) clamp(20px,4.4vw,64px) clamp(24px,3.5vw,48px)}
+.big{font-stretch:125%;font-weight:800;font-size:clamp(40px,10.6vw,176px);line-height:.98;letter-spacing:-.035em;margin:0;text-wrap:initial}
+.big .ln{display:block;overflow:hidden;padding-bottom:.07em}
+.big .ln>span{display:block;animation:rise .9s cubic-bezier(.2,.8,.2,1) .3s both}
+.big .ln+.ln>span{animation-delay:.42s}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+.sfoot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px 32px;flex-wrap:wrap}
+.sfoot .btns{margin:0}
+.btn.inv{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+.btn.line{color:var(--bg);border-color:color-mix(in srgb,var(--bg) 40%,transparent)}
+.btn.line:hover{opacity:1;border-color:var(--bg)}
+.from{font-size:18px;color:color-mix(in srgb,var(--bg) 72%,var(--ink))}
+@media(prefers-reduced-motion:reduce){.big .ln>span,.addr .blk{animation:none}}
+
+/* sections */
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px)}
+.three p{color:var(--muted)}
+.step{font-stretch:125%;font-weight:800;font-size:44px;line-height:1;display:block;margin-bottom:14px}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,56px)}
+.list div{padding:24px 0;border-bottom:1px solid var(--line)}
+.list p{color:var(--muted)}
+.contact{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:start}
+form{display:grid;gap:16px}
+[hidden]{display:none!important}
+.pick{border:0;padding:0;margin:0 0 6px;display:flex;gap:10px;flex-wrap:wrap}
+.pick legend{font-weight:600;font-size:15px;padding:0;margin-bottom:8px}
+.pick label{display:block;position:relative}
+.pick input{position:absolute;inset:0;opacity:0;margin:0;padding:0;border:0;width:100%;height:100%;cursor:pointer}
+.pick span{display:inline-flex;align-items:center;min-height:52px;padding:0 22px;border:2px solid var(--line);border-radius:12px;font-weight:700;font-size:16px}
+.pick input:checked+span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pick input:checked+span::before{content:"";width:8px;height:8px;background:currentColor;margin-right:10px}
+.pick input:focus-visible+span{outline:3px solid var(--ink);outline-offset:3px}
+.sent{min-height:1.6em}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.thanks{display:grid;gap:14px;justify-items:start}
+.thanks h2{margin:0}
+.thanks:focus{outline:none}
+label{display:grid;gap:6px;font-weight:600;font-size:15px}
+input,textarea{font:16px Archivo,sans-serif;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);width:100%}
+input:focus,textarea:focus{border-color:var(--ink)}
+textarea{min-height:120px;resize:vertical}
+.err{color:#c62828;font-size:15px;min-height:1.4em;margin-top:-6px}
+.direct{display:grid;gap:22px;margin:0}
+.direct dt{color:var(--muted);font-size:15px}
+.direct dd{margin:2px 0 0;font-weight:700;font-size:20px;overflow-wrap:anywhere}
+.direct dd a{text-decoration:none}
+.direct dd a:hover{text-decoration:underline}
+.end{background:var(--ink);color:var(--bg)}
+.end .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.end h2{margin:0}
+.end .btn{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:28px;font-size:15px;color:var(--muted);border-top:1px solid var(--line)}
+
+/* page transition */
+.curtain{position:fixed;inset:0;z-index:50;background:var(--ink);color:var(--bg);display:grid;place-items:center;transform:translateY(100%);visibility:hidden;pointer-events:none}
+.ct{font-size:clamp(48px,12vw,150px);opacity:0}
+.curtain.cover{visibility:visible;transform:none;transition:transform .45s cubic-bezier(.75,0,.25,1)}
+.curtain.cover .ct{opacity:1;transition:opacity .25s .2s}
+.curtain.leave{visibility:visible;transform:translateY(-100%);transition:transform .45s cubic-bezier(.75,0,.25,1)}
+.curtain.leave .ct{opacity:1}
+@media(prefers-reduced-motion:reduce){.curtain{display:none}}
+
+@media(max-width:860px){.contact{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:640px){.three,.list{grid-template-columns:minmax(0,1fr)}.top{position:static}.top .btn,.logo small{display:none}nav a{padding:0 4px;font-size:15px}.big{font-stretch:112%;font-size:15.5vw}.sfoot .btns{flex-direction:column;width:100%}.btn.lg{width:100%}.screen{min-height:calc(100svh - 86px)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="#home" aria-label="WDNR Studio, home"><b>WDNR<i class="blk"></i></b><small>studio</small></a>
+  <nav aria-label="Main"><a href="#services">Services</a><a href="#contact">Contact</a></nav>
+  <a class="btn solid" href="#contact" data-want="quote">Get a free quote</a>
+</div></header>
+
+<main>
+<section class="page" id="p-home" data-label="WDNR">
+  <div class="screen">
+    <div class="sbar" aria-hidden="true"><i></i><i></i><i></i><span class="addr"><span id="typed">yourbusiness.com</span><i class="blk"></i></span></div>
+    <div class="sbody">
+      <h1 class="big"><span class="ln"><span>Your business,</span></span> <span class="ln"><span>online.</span></span></h1>
+      <div class="sfoot">
+        <div class="btns"><a class="btn inv lg" href="#contact" data-want="quote">Get a free quote</a><a class="btn line lg" href="#contact" data-want="call">Book a free call</a></div>
+        <p class="from">Free, no commitment</p>
+      </div>
+    </div>
+  </div>
+  <div class="wrap band" id="how">
+    <h2>How it works</h2>
+    <div class="three">
+      <div><span class="step">1</span><h3>Free call</h3><p>15 minutes to understand what you need.</p></div>
+      <div><span class="step">2</span><h3>Your quote</h3><p>A clear price for your project, no surprises.</p></div>
+      <div><span class="step">3</span><h3>You go live</h3><p>I build it, you check it, it goes online.</p></div>
+    </div>
+  </div>
+  <div class="end band"><div class="wrap"><h2>Ready for your website?</h2><a class="btn" href="#contact" data-want="quote">Get a free quote</a></div></div>
+</section>
+
+<section class="page" id="p-services" data-label="Services">
+  <div class="wrap band">
+    <h1>Services</h1>
+    <div class="list">
+      <div><h3>Website creation</h3><p>A modern site that works on every phone.</p></div>
+      <div><h3>Redesign</h3><p>A fresh look for an old or broken site.</p></div>
+      <div><h3>Google visibility</h3><p>Found on Google search and Google Maps.</p></div>
+      <div><h3>Contact and booking</h3><p>Call, WhatsApp, forms and online booking.</p></div>
+      <div><h3>Several languages</h3><p>English, Greek, French and more.</p></div>
+      <div><h3>Maintenance</h3><p>Hosting, updates and changes when you need them.</p></div>
+    </div>
+  </div>
+  <div class="end band"><div class="wrap"><h2>Have a project in mind?</h2><a class="btn" href="#contact" data-want="quote">Get a free quote</a></div></div>
+</section>
+
+
+<section class="page" id="p-contact" data-label="Contact">
+  <div class="wrap band">
+    <h1>Contact</h1>
+    <div class="contact">
+      <div>
+      <form id="f" novalidate>
+        <fieldset class="pick">
+          <legend>I'd like</legend>
+          <label><input type="radio" name="want" value="quote" checked><span>A free quote</span></label>
+          <label><input type="radio" name="want" value="call"><span>A free call</span></label>
+        </fieldset>
+        <label for="fn">Name<input id="fn" name="name" autocomplete="name"></label>
+        <label for="fc">Email or phone<input id="fc" name="contact"></label>
+        <label for="ft" id="lt" hidden>Best time to call<input id="ft" name="time" placeholder="Weekdays after 5 pm"></label>
+        <label for="fm">Your project<textarea id="fm" name="message" placeholder="What your business does and what the website should do"></textarea></label>
+        <label class="hp" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="err" id="err" role="alert"></p>
+        <div class="btns" style="margin-top:0"><button class="btn solid" id="sendA" type="submit" hidden>Send my request</button><a class="btn solid" id="sendW" href="https://wa.me/33659505104" target="_blank" rel="noopener">Send on WhatsApp</a><a class="btn" id="sendE" href="mailto:demoulin.wand@gmail.com">Send by email</a></div>
+        <p class="muted sent" id="sent" aria-live="polite"></p>
+      </form>
+      <div class="thanks" id="thanks" tabindex="-1" hidden>
+        <h2>Request sent</h2>
+        <p class="muted">Thanks, I'll get back to you soon.</p>
+        <button class="btn" id="again" type="button">Send another request</button>
+      </div>
+      </div>
+      <dl class="direct">
+        <div><dt>Email</dt><dd><a href="mailto:demoulin.wand@gmail.com">demoulin.wand@gmail.com</a></dd></div>
+        <div><dt>Phone and WhatsApp</dt><dd><a href="tel:+33659505104">+33 6 59 50 51 04</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>WDNR Studio</span><span>+33 6 59 50 51 04</span><span>demoulin.wand@gmail.com</span></div></footer>
+<div class="curtain" aria-hidden="true"><span class="ct"></span></div>
+
+<script>
+{
+const pages=[...document.querySelectorAll('.page')];
+const ids=pages.map(p=>p.id.slice(2));
+const links=[...document.querySelectorAll('nav a')];
+const curtain=document.querySelector('.curtain');
+const ct=curtain.querySelector('.ct');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+const typed=document.getElementById('typed');
+const DOMAIN='yourbusiness.com';
+let current=null,busy=false,queued=null,timer=null;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const typeDomain=()=>{
+  clearInterval(timer);
+  if(reduce.matches){typed.textContent=DOMAIN;return}
+  let i=0;typed.textContent='';
+  timer=setInterval(()=>{typed.textContent=DOMAIN.slice(0,++i);if(i>=DOMAIN.length)clearInterval(timer)},55);
+};
+const show=(id,focus)=>{
+  pages.forEach(p=>p.classList.toggle('on',p.id==='p-'+id));
+  links.forEach(a=>a.getAttribute('href')==='#'+id?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+  current=id;window.scrollTo(0,0);
+  if(id==='home')typeDomain();
+  const h=document.getElementById('p-'+id).querySelector('h1');
+  if(h&&focus){h.setAttribute('tabindex','-1');h.focus({preventScroll:true})}
+};
+const go=async id=>{
+  if(!ids.includes(id))id='home';
+  if(id===current)return;
+  if(current===null){show(id,false);return}
+  if(reduce.matches){show(id,true);return}
+  if(busy){queued=id;return}
+  busy=true;
+  ct.innerHTML='';ct.append(document.getElementById('p-'+id).dataset.label);
+  const b=document.createElement('i');b.className='blk';ct.append(b);
+  curtain.className='curtain';void curtain.offsetWidth;
+  curtain.classList.add('cover');
+  await wait(500);
+  show(id,true);
+  curtain.className='curtain leave';
+  await wait(480);
+  curtain.className='curtain';
+  busy=false;
+  if(queued){const q=queued;queued=null;go(q)}
+};
+const fromHash=()=>go(location.hash.slice(1));
+window.addEventListener('hashchange',fromHash);
+fromHash();
+
+const f=document.getElementById('f'),err=document.getElementById('err'),sent=document.getElementById('sent');
+const lt=document.getElementById('lt'),sendW=document.getElementById('sendW'),sendE=document.getElementById('sendE');
+const sendA=document.getElementById('sendA'),thanks=document.getElementById('thanks');
+let apiMode=false;
+const build=()=>{
+  const d=Object.fromEntries(new FormData(f));
+  for(const k in d)d[k]=String(d[k]).trim();
+  const call=d.want==='call';
+  let t='Hello WDNR Studio,\n\nMy name is '+d.name+'. '+(call?"I'd like to book a free call.":"I'd like a free quote for a website.");
+  if(call&&d.time)t+='\nBest time to call: '+d.time;
+  if(d.message)t+='\n\n'+d.message;
+  t+='\n\nYou can reach me at '+d.contact+'.';
+  return {d,call,t};
+};
+const sync=()=>{
+  const {d,call,t}=build();
+  lt.hidden=!call;
+  if(d.name&&d.contact)err.textContent='';
+  sendW.href='https://wa.me/33659505104?text='+encodeURIComponent(t);
+  sendE.href='mailto:demoulin.wand@gmail.com?subject='+encodeURIComponent(call?'Free call request':'Free quote request')+'&body='+encodeURIComponent(t);
+};
+const check=e=>{
+  const {d}=build();
+  const miss=[['name','your name'],['contact','an email or phone number']].filter(([k])=>!d[k]).map(x=>x[1]);
+  if(miss.length){e.preventDefault();err.textContent='Please add '+miss.join(' and ')+'.';sent.textContent='';return}
+  err.textContent='';
+  sent.textContent='Your message is ready in '+(e.currentTarget===sendW?'WhatsApp':'your email app')+'. Press send there.';
+};
+f.addEventListener('input',sync);
+f.addEventListener('change',sync);
+// when the site runs on its own server, requests are saved there; otherwise they go by WhatsApp or email
+fetch('/api/health',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+  if(j&&j.ok){apiMode=true;sendA.hidden=false;sendW.hidden=true;sendE.hidden=true}
+}).catch(()=>{});
+f.addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!apiMode)return;
+  const {d}=build();
+  const miss=[['name','your name'],['contact','an email or phone number']].filter(([k])=>!d[k]).map(x=>x[1]);
+  if(miss.length){err.textContent='Please add '+miss.join(' and ')+'.';return}
+  err.textContent='';sendA.disabled=true;sendA.textContent='Sending…';
+  try{
+    const r=await fetch('/api/requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){const x=new Error(j.error||'');x.server=!!j.error;throw x}
+    f.reset();sync();f.hidden=true;thanks.hidden=false;thanks.focus();
+  }catch(x){
+    err.textContent=(x.server?x.message+' ':"Your request couldn't be sent. ")+'You can send it on WhatsApp or by email instead.';
+    sendW.hidden=false;sendE.hidden=false;
+  }finally{sendA.disabled=false;sendA.textContent='Send my request'}
+});
+document.getElementById('again').addEventListener('click',()=>{thanks.hidden=true;f.hidden=false;document.getElementById('fn').focus()});
+sendW.addEventListener('click',check);
+sendE.addEventListener('click',check);
+document.querySelectorAll('[data-want]').forEach(a=>a.addEventListener('click',()=>{thanks.hidden=true;f.hidden=false;f.elements.want.value=a.dataset.want;sync()}));
+sync();
+}
+</script>
+</body>
+</html>

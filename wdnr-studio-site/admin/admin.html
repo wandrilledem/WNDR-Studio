@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>WDNR Studio requests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/" aria-label="WDNR Studio website"><b>WDNR<i class="blk"></i></b><small>requests</small></a>
+  <div class="tools" id="tools" hidden>
+    <a class="btn" href="/api/admin/export.csv">Export CSV</a>
+    <button class="btn" id="logout" type="button">Log out</button>
+  </div>
+</header>
+
+<main>
+  <section id="login" class="login" hidden>
+    <h1>Log in</h1>
+    <form id="loginForm">
+      <label for="pw">Password<input id="pw" type="password" autocomplete="current-password" required></label>
+      <p class="err" id="loginErr" role="alert"></p>
+      <button class="btn solid" type="submit">Log in</button>
+    </form>
+  </section>
+
+  <section id="app" hidden>
+    <div class="head">
+      <h1>Requests</h1>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="bar">
+      <div class="chips" role="group" aria-label="Show">
+        <button type="button" class="chip" data-f="all" aria-pressed="true">All</button>
+        <button type="button" class="chip" data-f="new" aria-pressed="false">New</button>
+        <button type="button" class="chip" data-f="quote" aria-pressed="false">Quotes</button>
+        <button type="button" class="chip" data-f="call" aria-pressed="false">Calls</button>
+        <button type="button" class="chip" data-f="open" aria-pressed="false">In progress</button>
+        <button type="button" class="chip" data-f="won" aria-pressed="false">Won</button>
+      </div>
+      <label class="search" for="search"><span class="sr">Search</span><input id="search" type="search" placeholder="Search name, contact or project"></label>
+    </div>
+    <p class="err" id="appErr" role="alert"></p>
+    <ol class="list" id="list"></ol>
+    <div class="empty" id="empty" hidden>
+      <p id="emptyText">No requests yet. They appear here as soon as someone sends the form on your site.</p>
+    </div>
+  </section>
+</main>
+
+<template id="card">
+  <li class="card">
+    <div class="meta">
+      <span class="kind"></span>
+      <time class="when"></time>
+    </div>
+    <h2 class="name"></h2>
+    <div class="reach">
+      <span class="contact"></span>
+      <span class="acts"></span>
+    </div>
+    <p class="time"></p>
+    <p class="msg"></p>
+    <div class="edit">
+      <label class="st">Status
+        <select class="status">
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="quote_sent">Quote sent</option>
+          <option value="won">Won</option>
+          <option value="lost">Lost</option>
+        </select>
+      </label>
+      <label class="nt">Notes<textarea class="notes" rows="2" placeholder="Budget, next step, anything to remember"></textarea></label>
+      <div class="row">
+        <button type="button" class="btn solid save">Save notes</button>
+        <span class="saved" aria-live="polite"></span>
+        <button type="button" class="btn del">Delete</button>
+      </div>
+    </div>
+  </li>
+</template>
+<script src="/admin/admin.js"></script>
+</body>
+</html>
